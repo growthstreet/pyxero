@@ -161,8 +161,10 @@ class Manager(object):
                 data = [data[singular(key)]]
 
             out[key] = data
-        else:
+        elif len(deep_list) == 1:
             out = deep_list[0]
+        else:
+            out = None
         return out
 
     def dict_to_xml(self, root_elm, data):
@@ -226,6 +228,8 @@ class Manager(object):
             result = response[self.name]
         elif 'Attachments' in response:
             result = response['Attachments']
+        elif 'Organisations' in response:
+            result = response['Organisations']
         else:
             return None
 
@@ -241,9 +245,9 @@ class Manager(object):
             uri, params, method, body, headers, singleobject
         """
         def wrapper(*args, **kwargs):
-            
+
             timeout = kwargs.pop('timeout', None)
-            
+
             uri, params, method, body, headers, singleobject = func(*args, **kwargs)
 
             cert = getattr(self.credentials, 'client_cert', None)
